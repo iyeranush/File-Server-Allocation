@@ -1,0 +1,111 @@
+/*Dyanammic program. Uses Bottom up approach
+ * Inputs: n,m
+ * Output:Min of Maximum Sum Bandwidth
+ * */
+
+
+
+import java.util.Scanner;
+
+
+public class Dynammic {
+
+	public static int n;
+	public static int m;
+	public static int b[];
+	public static int sum[];
+	public static int Max[][];
+	public static Scanner scanner= new Scanner(System.in);
+	
+	public static void getinput()
+	{
+        System.out.println("Enter number of files:");
+
+		n=scanner.nextInt();
+        System.out.println("Enter number of servers:");
+
+		m=scanner.nextInt();
+		b= new int[n];
+		for(int p=0;p<n;p++)
+		{
+			b[p]=1;
+		}
+	}
+	
+	public static int min(int x, int y)//Function to find min of two numbers
+	{
+		if(x<y)
+			return x;
+		else 
+			return y;
+		
+	}
+	public static int max(int x, int y)//Function to find max of two numbers
+	{
+		if(x>y)
+			return x;
+		else 
+			return y;
+		
+	}
+
+	public static int dynammicBottomup()//Bottom Up Dynammic approach
+	{
+		sum=new int[n+1];
+		
+		Max=new int[n+1][m+1];//An array to store max values as per the comparisons.
+		
+		int s=1;
+		while(s <= n)//Calculate sum array
+		{sum[s] = sum[s-1] + b[s-1];
+		s++;
+		}
+
+		int q=1;  
+		while(q <= n)//Loop to initialize first column of Max[][] array
+		{
+		    Max[q][1] = sum[q];
+		q++;
+		}
+		int r=1;
+		while(r <= m)//Loop to initialize first row of Max[][] array
+		{
+		    Max[1][r] = b[0];
+		    r++;
+		}
+		 
+		int w=2;
+		while(w <= m) {
+			    for (int j = 2; j <= n; j++) {//A loop to update values of Max[][] array.
+			      int minmax = Max[j][w-1];
+			      int p=1;
+			      while(p <= j-1) {
+			    	  int maximum=(max(Max[p][w-1], sum[j]-sum[p]));//Cumulative sum.
+			        minmax = min(minmax,maximum );//Minimum of max sum is updated at each stage.
+			        p++;
+			      }
+			      Max[j][w] = minmax;
+			    }
+		w++;   
+		}
+		  
+		  
+		  return Max[n][m];
+		 
+	}
+
+
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		long startTime, endTime, totalTime;//Variables to calculate time.
+		Dynammic d= new Dynammic();
+		getinput();//Get inputs
+		startTime=System.nanoTime();
+		System.out.println("Minimum of Max Sum Bandwidth: "+dynammicBottomup());
+		endTime=System.nanoTime();
+		totalTime=endTime-startTime;
+		System.out.println("Total time taken for :"+ totalTime);
+	}
+
+}
