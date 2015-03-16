@@ -1,0 +1,89 @@
+/*Bruteforce algorithm is the trational exhaustive algorithm. Here in a recursion 
+ * all the subsets are compared.
+ * Inputs: n,m
+ * Output:Min of Maximum Sum Bandwidth
+ * 
+ * 
+ * */
+import java.util.Scanner;
+
+
+public class FSABruteforce {
+
+	public static int n;
+	public static int m;
+	public static int b[];
+	public static Scanner scanner= new Scanner(System.in);
+
+	public static void getinput()
+	{
+		 System.out.println("Enter number of files:");
+
+			n=scanner.nextInt();
+	        System.out.println("Enter number of servers:");
+
+			m=scanner.nextInt();
+			b= new int[n];
+			for(int p=0;p<n;p++)
+			{
+				b[p]=1;
+			}
+	}
+
+	public static int sum(int x, int y) {//This functions calculated prefixes repeatedly
+		  int sum = 0;
+		  int i=x;
+		  while(i<=y)
+		  {
+			  sum=sum+ b[i];
+			  i++;
+		  }
+		  return sum;
+		}
+		 
+	public static int bruteforce(int files, int servers) {
+		
+		  if (servers == 1)//If there is just one server
+		    return sum(0, files-1);
+		  if (files == 1)//If there is just one file
+		    return b[0];
+		 
+		  int minmax = 10000*1000*10;//Initializing minmax to a large number
+		  int max;
+		  int j=1;
+		  while(j<=files)
+		  {  
+			  
+			  int sum=sum(j, files-1);//Sum of prefix calculated.
+			  int brute=bruteforce(j,servers-1);//Recursive call
+			 
+			  if(brute  > sum)//check if previosuly assigned servers are optimal.
+			  {max= brute;}
+			  else
+			  {max=sum;}
+			  
+			  if(minmax>max)
+			  {minmax=max;}
+			  else
+			  {minmax=minmax;}
+				  
+			 
+			  j++;
+		  }
+		  
+		  return minmax;//Gives the min of maximum sums of bandwidth.
+		}
+
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		long startTime, endTime, totalTime;//Variables to calculate time.
+		getinput();	//Function to get inputs.	
+		startTime=System.nanoTime();
+		System.out.println("Bruteforce, Min of max sum "+bruteforce(n,m));
+		endTime=System.nanoTime();
+		totalTime=endTime-startTime;
+		System.out.println("Total time taken :"+ totalTime);
+	}
+
+}
