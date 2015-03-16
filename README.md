@@ -1,0 +1,2 @@
+# File-Server-Allocation
+This problem is linked to the allocation of files on content distribution networks (CDN). In this problem we assume that each file can only be placed on a single server in the CDN. Each file will cause a bandwidth requirement on the server it is allocated to. The purpose of the problem is to and an allocation of the files on the server so as to minimize the bandwidth required by the server that requires the most bandwidth.
