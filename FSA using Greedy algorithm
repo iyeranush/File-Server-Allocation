@@ -1,0 +1,122 @@
+/* This is program is related to finding Minimization of Maximum sum of 
+ * Bandwidth across servers. In this Program a Greedy Heuristic Approach is followed.
+ * The gist of the approach is that, the largest bandwidth file is allocated
+ * to the subset with the minimum sum bandwidth so far.
+ * For the purpose of sorting the ArrayList, an inbuild function called 
+ * Collections.sort() is used. This function has a complexity similar to Merge Sort.
+ * 
+ * 
+ * */
+
+
+
+import java.io.*;
+import java.util.*;
+
+public class FSAHeuristics  {
+
+	public static int n;
+	public static int m;
+	public static ArrayList<Integer> b=new ArrayList<Integer>();//Bandwidth Array
+	public static Scanner scanner= new Scanner(System.in);//Scanner to take input
+	public static int[] sum;//Array to store Sum of the subsets arrays
+	
+	public static void getinput()
+	{
+        System.out.println("Enter number of files:");
+		n=scanner.nextInt();
+        System.out.println("Enter number of servers:");
+		m=scanner.nextInt();
+		for(int p=0;p<n;p++)//Files with Bandwidth
+		{
+			b.add(1);
+		}
+		Collections.sort(b);/*For Sorting the array prior to processing it*/
+		
+	}
+
+	public static boolean Heuristics() {//Function to implement Greedy Heuristic
+		
+		int x=n;
+		if(m==1)//It is checked if there is just one server.
+		{
+			return false;
+		}
+		else
+		{
+		ArrayList<ArrayList<Integer>> subpartitions = new ArrayList<ArrayList<Integer>>();
+		//Sub arrayLists are formed in a loop.
+		for(int i=0;i<m;i++)
+		{
+			subpartitions.add(new ArrayList<Integer>());
+		}
+		
+		sum=new int[m];
+		for(int i=0;i<m;i++)//Initially one element each is inserted in every subarray
+		{
+			subpartitions.get(i).add(b.get(n-1));
+			sum[i]=subpartitions.get(i).get(0);
+			b.remove(n-1);
+			n=b.size();
+		}
+		while(!b.isEmpty())//Until the b has some element
+		{
+			int s=checksum(sum);//The least sum subarray is searched.
+			subpartitions.get(s).add(b.get(n-1));//Next element of bandwidth array is inserted into the selected sub array.
+			sum[s]=sum[s]+b.get(n-1);//Sum is updated
+			b.remove(n-1);//Element is removed from bandwidth array
+			n=b.size();//New size is calculated
+		}
+		}
+		return true;
+	
+	}
+	/*checksum() function is used to find the least sum sub array*/
+	public static int checksum(int sum[])
+	{
+		int j=0;
+		int x=sum[0];
+		for(int i=0;i<m;i++)//array is traced for the smallest number.
+		{   
+			if(x>sum[i])
+				{x=sum[i];
+				j=i;}
+			
+			
+		}
+		return j;
+	}
+	public static int checkmax(int sum[])
+	{
+		int j=0;
+		int x=sum[0];
+		for(int i=0;i<m;i++)
+		{   
+			if(x<sum[i])
+				{x=sum[i];
+				j=i;}
+			
+			
+		}
+		return j;
+	}
+	
+	public static void main(String[] args) {
+		getinput();//Function to get inputs.
+		long startTime, endTime, totalTime;//Variables to calculate time.
+		startTime=System.nanoTime();
+		if(Heuristics()==false)
+		{
+			System.out.println("just one server. Hence all the files are placed in the same server.");
+		}
+		else
+		{
+			System.out.println(sum[checkmax(sum)]);
+		}
+		endTime=System.nanoTime();
+		totalTime=endTime-startTime;
+		System.out.println("Total time taken for :"+ totalTime);
+		
+	}
+
+}
